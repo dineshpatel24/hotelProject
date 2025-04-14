@@ -1,0 +1,23 @@
+<% const renderedSuccess = new Set(); %>
+<% if (success && success.length > 0) { %>
+  <% success.forEach(msg => { %>
+    <% if (!renderedSuccess.has(msg)) { renderedSuccess.add(msg); %>
+      <div class="alert alert-success alert-dismissible fade show col-md-6 offset-md-3 mx-auto text-center" role="alert">
+        <%= msg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+  <% }) %>
+<% } %>
+
+<% const renderedError = new Set(); %>
+<% if (error && error.length > 0) { %>
+  <% error.forEach(msg => { %>
+    <% if (!renderedError.has(msg)) { renderedError.add(msg); %>
+      <div class="alert alert-danger alert-dismissible fade show col-md-6 offset-md-3 mx-auto text-center" role="alert">
+        <%= msg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+  <% }) %>
+<% } %>

@@ -1,0 +1,179 @@
+<% layout('layouts/boilerplate') %>
+
+    <head>
+        <style>
+            .filter-bar {
+                display: flex;
+                overflow-x: auto;
+                gap: 1.5rem;
+                padding: 0.75rem 1rem;
+                border-bottom: 1px solid #ddd;
+                background-color: #fff;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* .filter-bar::-webkit-scrollbar {
+                display: none;
+                /* hide scrollbar for cleaner look */
+
+
+            .filter-icon {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-width: 80px;
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                border-radius: 12px;
+                scroll-snap-align: start;
+            }
+
+            .filter-icon:hover {
+                background-color: #f2f2f2;
+            }
+
+            .filter-text {
+                margin-top: 5px;
+                font-size: 0.85rem;
+                color: #333;
+            }
+
+            .tax-info {
+                display: none;
+            }
+
+            .tax-toggle {
+                border: 1px solid black;
+                border-radius: 1rem;
+                height: auto;
+                padding: 0.5rem 1rem;
+                margin-left: auto;
+                margin-right: auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                white-space: nowrap;
+                width: fit-content;
+                background-color: #fff;
+            }
+
+            .tax-toggle label {
+                margin: 0;
+                font-size: 0.9rem;
+                color: #333;
+            }
+
+            .tax-toggle .form-check-input {
+                cursor: pointer;
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+            integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8b+z4+2e5c5e5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous" />
+        <link rel="stylesheet" href="/stylesheets/style.css">
+        <link rel="stylesheet" href="/stylesheets/listings.css">
+        <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+    </head>
+
+    <body>
+        <!-- Filter Section -->
+        <div class="filter-bar">
+            <div class="filter-icon">
+                <i class="fa-solid fa-fire fs-4"></i>
+                <span class="filter-text">Trending</span>
+            </div>
+            <div class="filter-icon">
+                <i class="fa-solid fa-bed fs-4"></i>
+                <span class="filter-text">Rooms</span>
+            </div>
+            <div class="filter-icon">
+                <i class="fa-solid fa-city fs-4"></i>
+                <span class="filter-text">Iconic Cities</span>
+            </div>
+            <div class="filter-icon">
+                <i class="fa-solid fa-mountain fs-4"></i>
+                <span class="filter-text">Mountains</span>
+            </div>
+            <div class="filter-icon">
+                <i class="fa-solid fa-chess-rook fs-4"></i>
+                <span class="filter-text">Castles</span>
+            </div>
+            <div class="filter-icon">
+                <i class="fa-solid fa-person-swimming fs-4"></i>
+                <span class="filter-text">Amazing Pools</span>
+            </div>
+            <div class="filter-icon">
+                <i class="fa-solid fa-campground fs-4"></i>
+                <span class="filter-text">Camping</span>
+            </div>
+            <div class="filter-icon">
+                <i class="fa-solid fa-tractor fs-4"></i>
+                <span class="filter-text">Farms</span>
+            </div>
+            <div class="filter-icon">
+                <i class="fa-regular fa-snowflake fs-4"></i>
+                <span class="filter-text">Arctic</span>
+            </div>
+
+            <div class="tax-toggle">
+                <div class="form-check-reverse form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                    <label class="form-check-label" for="flexSwitchCheckDefault">
+                        Display total after taxes
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Listings Section -->
+        <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+            <% for (let listing of allListings) { %>
+                <a href="/listings/<%= listing._id %>" class="listing-link">
+                    <div class="card col listing-card">
+                        <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image"
+                            style="height: 20rem;">
+                        <div class="card-img-overlay"></div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <b>
+                                    <%= listing.title %>
+                                </b><br>
+                                &#8377;<%= listing.price.toLocaleString("en-IN") %> /night
+                                    <i class="tax-info"> &nbsp; +18% GST </i>
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                <% } %>
+        </div>
+    </body>
+
+    <script>
+        // Get the toggle switch element
+        let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+
+        // On page load, check the saved state in localStorage
+        window.addEventListener("DOMContentLoaded", () => {
+            const isChecked = localStorage.getItem("taxToggleState") === "true"; // Retrieve the saved state
+            taxSwitch.checked = isChecked; // Set the toggle state
+            toggleTaxInfo(isChecked); // Show or hide tax info based on the state
+        });
+
+        // Add event listener for the toggle switch
+        taxSwitch.addEventListener("click", () => {
+            const isChecked = taxSwitch.checked; // Get the current state
+            localStorage.setItem("taxToggleState", isChecked); // Save the state in localStorage
+            toggleTaxInfo(isChecked); // Show or hide tax info
+        });
+
+        // Function to show or hide tax info
+        function toggleTaxInfo(isChecked) {
+            let taxInfo = document.getElementsByClassName("tax-info");
+            for (let info of taxInfo) {
+                info.style.display = isChecked ? "inline" : "none";
+            }
+        }
+    </script>
